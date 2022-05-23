@@ -102,7 +102,7 @@ const UsersTable = () => {
             </div>
         );
     }
-    return <h2>Loading...</h2>;
+    return "Loading...";
 };
 
 UsersTable.propTypes = {

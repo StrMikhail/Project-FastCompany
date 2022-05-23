@@ -3,10 +3,17 @@ import PropTypes from "prop-types";
 import Plate from "./Plate";
 import Bookmark from "./Bookmark";
 import QualitiesList from "./QualitiesList";
+import { Link } from "react-router-dom";
 
 const UserPlate = ({ users, onSort, removeItem, selectedSort, handleToggleBookMark }) => {
     const columns = {
-        name: { path: "name", name: "Имя" },
+        name: {
+            path: "name", 
+            name: "Имя",
+            component: (user) => (
+                <Link to={`/users/${user._id}`}>{user.name}</Link>
+            )
+        },
         qualities: { name: "Качества", component: (user) => (<QualitiesList qualities={user.qualities}/>) },
         professions: { path: "profession.name", name: "Профессия" },
         completedMeetings: { path: "completedMeetings", name: "Встрелится, раз" },
