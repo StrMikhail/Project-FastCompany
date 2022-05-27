@@ -24,13 +24,7 @@ const UserComponent = ({ user, removeItem }) => {
                     <UserFavoriteFlag />
                 </td>
                 <th scope="col">
-                    <button
-                        type="button"
-                        className="btn btn-sm btn-danger "
-                        onClick={() => removeItem(user._id)}
-                    >
-                        Удалить
-                    </button>
+                 
                 </th>
             </tr>
         </tbody>
