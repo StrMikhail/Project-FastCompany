@@ -25,6 +25,7 @@ const UserPage = ({ userId }) => {
     const handleHistory = () => {
         history.push(`/users/`);
     };
+    console.log("render page");
     const handlePushComment = (userComment, text) => {
         api.comments.add({
             _id: Date.now(),
@@ -44,16 +45,16 @@ const UserPage = ({ userId }) => {
                 <>
                 <div className="container mt-4">
                     <div className="row gutters-sm">
-                    <div className="col-1">
-                        <button
-                            onClick={handleHistory}
-                            className="btn btn-outline-primary mb-5 border border-light"
-                            style={{ height: "100%", width: "100%" }}
-                        >
-                            <h2><i className="bi bi-arrow-bar-left bi-lg"></i></h2>
-                            <p>Назад</p>
-                        </button>
-                    </div>
+                        <div className="col">
+                            <button
+                                onClick={handleHistory}
+                                className="btn btn-outline-primary mb-2"
+                                style={{ height: "100%", width: "100%" }}
+                            >
+                                <h2><i className="bi bi-arrow-bar-left bi-lg"></i></h2>
+                                <p>Назад</p>
+                            </button>
+                        </div>
                         <UserInfo user={user}/>
                         <UserComments
                             pushComment={handlePushComment}
