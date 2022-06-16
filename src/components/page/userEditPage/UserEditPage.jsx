@@ -111,7 +111,7 @@ const userEditPage = () => {
                     <div className="row">
                     <p className="col-1">
                         <button
-                            className="btn btn-outline-primary mb-5"
+                            className="btn btn-outline-primary mb-1"
                             style={{ height: "100%", width: "100%" }}
                         >
                             <h2><i className="bi bi-arrow-bar-left bi-sm"></i></h2>

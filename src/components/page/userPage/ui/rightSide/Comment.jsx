@@ -5,15 +5,21 @@ import api from "../../../../../api";
 import { displayDate } from "../../../../../utils/displayDate";
 const Comment = ({ comment, removeComment }) => {
     const [userName, setUserName] = useState();
-    useEffect(() => {
-        api.users.getById(comment.userId).then((data) => setUserName(data.name));
+    console.log(comment);
+    useEffect(async () => {
+        const user = await api.users.getById(comment.userId);
+        try {
+            setUserName(user.name);
+            console.log(user);
+        } catch (error) {
+        }
     }, []);
     const handleDelete = () => {
         removeComment(comment._id);
     };
     return (
         <>
-        {userName && (
+        {userName != null && (
                 <div className="bg-light card-body  mb-3">
                 <div className="row">
                     <div className="col">

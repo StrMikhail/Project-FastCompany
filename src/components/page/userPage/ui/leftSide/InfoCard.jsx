@@ -9,7 +9,7 @@ const InfoCard = ({ user }) => {
         history.push(`/users/${user._id}/edit`);
     };
     return (
-        <div className="card card-body mb-3">
+        <div className="card card-body mb-3 border-primary">
             <button
                 className="position-absolute top-0 end-0 btn btn-light btn-sm"
                 onClick={handleHistory}

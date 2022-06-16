@@ -21,7 +21,7 @@ const CommentCreate = ({ users, pushComment }) => {
         });
     };
     return (
-        <div className="card mb-2">
+        <div className="card mb-2 border-primary">
             <div className="p-2">
             <h1>Новый комментарий</h1>
             </div>
