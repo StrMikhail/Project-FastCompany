@@ -19,7 +19,9 @@ const userEditPage = () => {
     });
     const validatorConfig = {
         email: {
-            isRequired: { message: "Электронная почта обязательна для заполнения" },
+            isRequired: {
+                message: "Электронная почта обязательна для заполнения"
+            },
             isEmail: { message: "Email введен некорректно" }
         },
         name: {
@@ -32,18 +34,18 @@ const userEditPage = () => {
         return Object.keys(errors).length === 0;
     };
     useEffect(() => {
-        api.users.getById(userId).then((data) => setUser({
-            _id: data._id,
-            name: data.name,
-            email: data.email,
-            sex: data.sex,
-            profession: data.profession._id,
-            qualities: data.qualities.map((qual) => {
-                return { label: qual.name, value: qual._id };
+        api.users.getById(userId).then((data) =>
+            setUser({
+                _id: data._id,
+                name: data.name,
+                email: data.email,
+                sex: data.sex,
+                profession: data.profession._id,
+                qualities: data.qualities.map((qual) => {
+                    return { label: qual.name, value: qual._id };
+                })
             })
-         }
-
-        ));
+        );
         api.professions.fetchAll().then((data) => {
             const professionsList = Object.keys(data).map((professionName) => ({
                 label: data[professionName].name,
@@ -91,7 +93,7 @@ const userEditPage = () => {
     };
 
     const handleChange = (target) => {
-        setUser(prevState => ({ ...prevState, [target.name]: target.value }));
+        setUser((prevState) => ({ ...prevState, [target.name]: target.value }));
     };
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -103,73 +105,80 @@ const userEditPage = () => {
             profession: getProfessionById(profession),
             qualities: getQualities(qualities)
         });
-            history.push(`/users/${userId}`);
+        history.push(`/users/${userId}`);
     };
     return (
         <form onSubmit={handleSubmit}>
             <div className="container m-4 ">
-                    <div className="row">
+                <div className="row">
                     <p className="col-1">
                         <button
-                            className="btn btn-outline-primary mb-5"
+                            className="btn btn-outline-primary mb-1"
                             style={{ height: "100%", width: "100%" }}
                         >
-                            <h2><i className="bi bi-arrow-bar-left bi-sm"></i></h2>
+                            <h2>
+                                <i className="bi bi-arrow-bar-left bi-sm"></i>
+                            </h2>
                             <p>Назад</p>
                         </button>
-                        </p>
-                        <div className="col-md-6 offset-md-3 p-4 shadow-lg">
-                            {qualities.length ? (
-                                <>
-                                    <p>Редактирование пользователя</p>
-                                    <TextField
-                                        label="Имя"
-                                        name="name"
-                                        value={user.name}
-                                        onChange={handleChange}
-                                        error={errors.name}
-
-                                    />
-                                    <TextField
-                                        label="Электронная почта"
-                                        name="email"
-                                        value={user.email}
-                                        onChange={handleChange}
-                                        error={errors.email}
-                                    />
-                                    <SelectField
-                                        label="Выберите профессию"
-                                        name="profession"
-                                        dafaultOption="Выбрать..."
-                                        options={professions}
-                                        onChange={handleChange}
-                                        value={user.profession}
-                                    />
-                                    <RadioField
-                                        options={[
-                                            { name: "Мужской", value: "male" },
-                                            { name: "Женский", value: "female" },
-                                            { name: "Другой", value: "other" }
-                                        ]}
-                                        value={user.sex}
-                                        name="sex"
-                                        onChange={handleChange}
-                                    />
-                                    <MultiSelectField
-                                        label="Выберите качества"
-                                        name="qualities"
-                                        options={qualities}
-                                        onChange={handleChange}
-                                        defaulValue={user.qualities}
-                                    />
-                                    <button disabled={!isValid} className="btn btn-primary w-100 mx-auto">Сохранить</button>
-                                </>
-                            ) : <Loading radius={3}/>
-                        }
+                    </p>
+                    <div className="col-md-6 offset-md-3 p-4 shadow-lg">
+                        {qualities.length ? (
+                            <>
+                                <p>Редактирование пользователя</p>
+                                <TextField
+                                    label="Имя"
+                                    name="name"
+                                    value={user.name}
+                                    onChange={handleChange}
+                                    error={errors.name}
+                                />
+                                <TextField
+                                    label="Электронная почта"
+                                    name="email"
+                                    value={user.email}
+                                    onChange={handleChange}
+                                    error={errors.email}
+                                />
+                                <SelectField
+                                    label="Выберите профессию"
+                                    name="profession"
+                                    dafaultOption="Выбрать..."
+                                    options={professions}
+                                    onChange={handleChange}
+                                    value={user.profession}
+                                />
+                                <RadioField
+                                    options={[
+                                        { name: "Мужской", value: "male" },
+                                        { name: "Женский", value: "female" },
+                                        { name: "Другой", value: "other" }
+                                    ]}
+                                    value={user.sex}
+                                    name="sex"
+                                    onChange={handleChange}
+                                />
+                                <MultiSelectField
+                                    label="Выберите качества"
+                                    name="qualities"
+                                    options={qualities}
+                                    onChange={handleChange}
+                                    defaulValue={user.qualities}
+                                />
+                                <button
+                                    disabled={!isValid}
+                                    className="btn btn-primary w-100 mx-auto"
+                                >
+                                    Сохранить
+                                </button>
+                            </>
+                        ) : (
+                            <Loading radius={3} />
+                        )}
                     </div>
                 </div>
             </div>
         </form>
-);
+    );
 };
 export default userEditPage;

@@ -3,8 +3,8 @@ import PropTypes from "prop-types";
 
 const Loading = ({ radius }) => {
     return (
-        <div className="container text-center">
-            <div className="text-center" style={{ margin: "15rem" }}>
+        <div className="text-center">
+            <div className="text-center" style={{ margin: "13rem" }}>
                 <div
                     className="spinner-border"
                     style={{ width: `${radius}rem`, height: `${radius}rem` }}
