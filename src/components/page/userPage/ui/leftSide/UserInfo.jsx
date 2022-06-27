@@ -6,8 +6,8 @@ import PropTypes from "prop-types";
 
 const UserInfo = ({ user }) => {
     return (
-            <div className="col-md-4 mb-3">
-                <InfoCard user={user} />
+            <div className="col mb-3">
+                {user ? <InfoCard user={user} /> : "Loading"}
                 <InfoQual qualities={user.qualities}/>
                 <InfoMeetings meetings={user.completedMeetings}/>
             </div>
