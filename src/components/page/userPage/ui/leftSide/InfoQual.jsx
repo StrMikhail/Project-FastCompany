@@ -4,7 +4,7 @@ import QualitiesList from "../../../../ui/qualities";
 
 const InfoQual = ({ qualities }) => {
     return (
-        <div className="card mb-3">
+        <div className="card mb-3 border-primary">
             <div className="card-body d-flex flex-column justify-content-center text-center">
                 <h5 className="card-title">
                     <span>Качества</span>
