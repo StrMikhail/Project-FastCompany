@@ -10,9 +10,10 @@ import UsersLenghtSpan from "../../ui/UsersLenghtSpan";
 import SearchStatus from "../../ui/SearchStatus";
 import Loading from "../../ui/Loading";
 import { useUser } from "../../../hooks/useUsers";
-import { useProfessions } from "../../../hooks/useProfession";
-import { useQialities } from "../../../hooks/useQialities";
 import { useAuth } from "../../../hooks/useAuth";
+import { useSelector } from "react-redux";
+import { getQualities } from "../../../store/qualities";
+import { getProfessions } from "../../../store/professions";
 
 const UsersListPage = () => {
     const [currentPage, setCurrentPage] = useState(1);
@@ -23,8 +24,8 @@ const UsersListPage = () => {
 
     const { users } = useUser();
     const { currentUser } = useAuth();
-    const { profession } = useProfessions();
-    const { qualities } = useQialities();
+    const profession = useSelector(getProfessions())
+    const qualities = useSelector(getQualities())
     const usersList = users;
     useEffect(() => {
         setCurrentPage(1);
