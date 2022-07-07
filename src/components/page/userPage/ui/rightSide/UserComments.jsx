@@ -2,23 +2,34 @@ import React, { useEffect } from "react";
 import CommentCreate from "./CommentCreate";
 import CommentList from "./CommentList";
 import PropTypes from "prop-types";
-import { useComments } from "../../../../../hooks/useComments";
+import { useDispatch, useSelector } from "react-redux";
+import { createComment, getComments, getCommentsLoadingStatus, loadCommentsList, removeComment } from "../../../../../store/comments";
+import { useParams } from "react-router-dom";
+import { getCurrentUserId } from "../../../../../store/users";
 
 const UserComments = () => {
-    const { createComment, comments, removeComment } = useComments();
-    const handleSubmit = (data) => {
-        createComment(data)
-    }
+    const {userId} = useParams()
+    const currentUserId = useSelector(getCurrentUserId())
+    const comments = useSelector(getComments())
+    const isLoading = useSelector(getCommentsLoadingStatus())
+    const dispatch = useDispatch();
     useEffect(() => {
+        dispatch(loadCommentsList(userId))
+    }, [userId])
 
-    }, [comments])
-    const handleDeleteCommetn = (id) => {
-        removeComment(id);
+    const handleSubmit = (text) => {
+        const data = {...text, pageId: userId, userId: currentUserId} 
+        dispatch(createComment(data))
     }
+
+    const handleDeleteCommetn = (id) => {
+        dispatch(removeComment(id))
+    }
+
     return (
         <div className="container col-md-7">
             <CommentCreate onSubmit={handleSubmit}/>
-            {comments.length > 0 ? (<CommentList
+            {!isLoading && comments.length !== 0 ? (<CommentList
                 comments={comments}
                 onDelete={handleDeleteCommetn}
                 />) : null }

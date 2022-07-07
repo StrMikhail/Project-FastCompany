@@ -5,13 +5,14 @@ import SelectField from "../commom/form/SelectField";
 import RadioField from "../commom/form/RadioField";
 import MultiSelectField from "../commom/form/MultiSelectField";
 import CheckBoxField from "../commom/form/CheckBoxField";
-import { useQialities } from "../../hooks/useQialities";
-import { useProfessions } from "../../hooks/useProfession";
-import { useAuth } from "../../hooks/useAuth";
-import { useHistory } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { getQualities } from "../../store/qualities";
+import { getProfessions } from "../../store/professions";
+import { useDispatch } from "react-redux";
+import { signUp } from "../../store/users";
 
 const RegisterForm = () => {
-    const history = useHistory();
+    const dispatch = useDispatch();
     const [data, setData] = useState({
         email: "",
         password: "",
@@ -21,14 +22,13 @@ const RegisterForm = () => {
         qualities: [],
         licence: false
     });
-    const { signUp } = useAuth();
-    const { qualities } = useQialities();
+    const qualities = useSelector(getQualities())
     const qualitiesList = qualities.map((q) => ({
         label: q.name,
         value: q._id
     }));
-    const { profession } = useProfessions();
-    const professionsList = profession.map((q) => ({
+    const professions = useSelector(getProfessions())
+    const professionsList = professions.map((q) => ({
         label: q.name,
         value: q._id
     }));
@@ -89,7 +89,7 @@ const RegisterForm = () => {
 
     const isValid = Object.keys(errors).length === 0;
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         const isValid = validate();
         if (!isValid) return;
@@ -97,12 +97,7 @@ const RegisterForm = () => {
             ...data,
             qualities: data.qualities.map((q) => q.value)
         };
-        try {
-            await signUp(newData);
-            history.push("/");
-        } catch (error) {
-            setErrors(error);
-        }
+        dispatch(signUp(newData))
     };
     return (
         <form onSubmit={handleSubmit}>

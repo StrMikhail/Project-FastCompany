@@ -1,17 +1,15 @@
-import React, { useEffect } from "react";
+import React from "react";
+import { useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 import PropTypes from "prop-types";
 import UserInfo from "./ui/leftSide/UserInfo";
 import UserComments from "./ui/rightSide/UserComments";
 import Loading from "../../ui/Loading";
-import { useUser } from "../../../hooks/useUsers";
-import { useHistory } from "react-router-dom";
-import { CommentsProvider } from "../../../hooks/useComments";
+import { getUserById } from "../../../store/users"
 
 const UserPage = ({ userId }) => {
     const history = useHistory();
-    const { getUserById } = useUser();
-    const user = getUserById(userId);
-
+    const user = useSelector(getUserById(userId))
     if (user) {
         return (
                 <>
@@ -21,16 +19,14 @@ const UserPage = ({ userId }) => {
                             <button
                                 className="btn flew-wrap btn-outline-primary mb-2"
                                 style={{ height: "100%", width: "100%" }}
-                                onClick={() => history.push("/users")}
+                                onClick={() => history.push(`/users`)}
                             >
                                 <h2><i className="bi bi-arrow-bar-left bi-lg"></i></h2>
                                 <p>Назад</p>
                             </button>
                         </div>
                         <UserInfo user={user}/>
-                        <CommentsProvider>
                             <UserComments/>
-                        </CommentsProvider>
                     </div>
                 </div>
                 </>

@@ -11,7 +11,7 @@ const commentService = {
         const { data } = await httpService.get(commentEndpoint, {
             params:{
                 orderBy: '"pageId"',
-                equalTo: `"${pageId}"`
+                equalTo: `"${pageId}"`,
             }
         });
         return data;

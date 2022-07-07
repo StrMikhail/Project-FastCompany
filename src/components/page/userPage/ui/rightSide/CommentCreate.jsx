@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import TextAreaField from "../../../../commom/form/TextAreaField";
 import { validator } from "../../../../../utils/validator";
 const CommentCreate = ({ onSubmit }) => {
+
     const initialData = {
         comment: ""
     };
@@ -43,12 +44,8 @@ const CommentCreate = ({ onSubmit }) => {
         e.preventDefault();
         const isValid = validate();
         if (!isValid) return;
-        try {
-            onSubmit(data);
-            clearForm();    
-        } catch (error) {
-            setErrors(error);
-        }
+        onSubmit(data)
+        clearForm()
     };
     return (
         <div className="card mb-2 border-primary">

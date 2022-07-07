@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import _ from "lodash";
-
 import Pagination from "../../commom/Pagination";
 import { paginate } from "../../../utils/paginate.js";
 import GroupList from "../../commom/GroupList";
@@ -9,10 +8,10 @@ import UserTable from "../../ui/UserTable";
 import UsersLenghtSpan from "../../ui/UsersLenghtSpan";
 import SearchStatus from "../../ui/SearchStatus";
 import Loading from "../../ui/Loading";
-import { useUser } from "../../../hooks/useUsers";
-import { useProfessions } from "../../../hooks/useProfession";
-import { useQialities } from "../../../hooks/useQialities";
-import { useAuth } from "../../../hooks/useAuth";
+import { useSelector } from "react-redux";
+import { getQualities } from "../../../store/qualities";
+import { getProfessions } from "../../../store/professions";
+import { getCurrentUserId, getUsers } from "../../../store/users";
 
 const UsersListPage = () => {
     const [currentPage, setCurrentPage] = useState(1);
@@ -21,11 +20,10 @@ const UsersListPage = () => {
     const [sortBy, setSortBy] = useState({ iter: "name", order: "asc" });
     const pageSize = 8;
 
-    const { users } = useUser();
-    const { currentUser } = useAuth();
-    const { profession } = useProfessions();
-    const { qualities } = useQialities();
-    const usersList = users;
+    const usersList = useSelector(getUsers())
+    const currentUserId  = useSelector(getCurrentUserId())
+    const profession = useSelector(getProfessions())
+    const qualities = useSelector(getQualities())
     useEffect(() => {
         setCurrentPage(1);
     }, [selectedProf]);
@@ -66,8 +64,8 @@ const UsersListPage = () => {
         setSelectedProf();
     };
  
-    if (users && qualities.lenght !== 0 && profession) {
-        const users = usersList.filter(u => u._id !== currentUser._id);
+    if (usersList && qualities.lenght !== 0 && profession) {
+        const users = usersList.filter(u => u._id !== currentUserId);
         let searchedUsers;
         if (searchUsers) {
             searchedUsers = users.filter(user => user.name.toLowerCase().includes(searchUsers.toLowerCase()));

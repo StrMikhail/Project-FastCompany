@@ -2,12 +2,14 @@ import React, { useState, useEffect } from "react";
 import { validator } from "../../utils/validator";
 import CheckBoxField from "../commom/form/CheckBoxField";
 import TextField from "../commom/form/TextField";
-import { useAuth } from "../../hooks/useAuth";
 import { useHistory } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { getAuthErrors, login } from "../../store/users";
 
 const LoginForm = () => {
-    const { signIn } = useAuth();
+    const dispatch = useDispatch();
     const history = useHistory();
+    const loginError = useSelector(getAuthErrors())
     const [data, setData] = useState({
         email: "",
         password: "",
@@ -52,16 +54,13 @@ const LoginForm = () => {
 
     const isValid = Object.keys(errors).length === 0;
 
-    async function handleSubmit (e) {
+    const handleSubmit = (e) => {
         e.preventDefault();
         const isValid = validate();
         if (!isValid) return;
-        try {
-            await signIn(data);
-            history.push("/");
-        } catch (error) {
-            setErrors(error)
-        }
+        const redirect = history.location.state ? history.location.state.from.pathname : "/"
+        dispatch(login({payload: data, redirect}))
+
     };
     return (
         <form onSubmit={handleSubmit}>
@@ -86,6 +85,7 @@ const LoginForm = () => {
                 name="stayOn"
                 text="Оставаться в системе"
             />
+            {loginError && <p className="text-danger">{loginError}</p>}
             <button
                 disabled={!isValid}
                 className="btn btn-primary w-100 mx-auto"

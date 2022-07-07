@@ -8,9 +8,9 @@ const CommentList = ({ comments, onDelete }) => {
             <div className="card-body ">
                 <h2>Комментарии</h2>
                 <hr />
-                    {comments.length === !0 ? <h2>Loading...</h2> : (comments.map(comment => (
+                    {comments.map(comment => (
                         <Comment key={comment._id} comment={comment} onDelete={onDelete}/>
-                    )))}
+                    ))}
             </div>
         </div>
     );

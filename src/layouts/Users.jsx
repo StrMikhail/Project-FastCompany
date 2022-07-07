@@ -1,26 +1,32 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { Redirect, useParams } from "react-router-dom";
 import UserPage from "../components/page/userPage";
 import UsersListPage from "../components/page/usersListPage";
 import UserEditPage from "../components/page/userEditPage";
-import UserProvider from "../hooks/useUsers";
+import { getCurrentUserId } from "../store/users";
+import { useSelector } from "react-redux";
+import UsersLoader from "../components/hoc/usersLoader";
 
 const Users = () => {
     const params = useParams();
     const { userId, edit } = params;
+    const currentUserId = useSelector(getCurrentUserId())
     return (
         <>
-            <UserProvider>
-                {userId ? (
-                    edit ? (
-                        <UserEditPage/>
-                    ) : (
-                        <UserPage userId={userId} />
-                    )
-                ) : (
-                    <UsersListPage />
-                )}
-            </UserProvider>
+            <UsersLoader>
+                        {userId ? (
+                            edit ? ( 
+                                userId === currentUserId ? (
+                                <UserEditPage/>
+                                ):( <Redirect to={`/users/${currentUserId}/edit`}/>)
+                            ) : (
+                                <UserPage userId={userId} />
+                            )
+                        ) : (
+                            <UsersListPage />
+                        )
+                    }
+            </UsersLoader>
         </>
     );
 };
