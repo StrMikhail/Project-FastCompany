@@ -1,20 +1,22 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import TextField from "../../commom/form/TextField";
 import RadioField from "../../commom/form/RadioField";
 import SelectField from "../../commom/form/SelectField";
 import MultiSelectField from "../../commom/form/MultiSelectField";
 import { validator } from "../../../utils/validator";
-import Loading from "../../ui/Loading";
 import { useAuth } from "../../../hooks/useAuth";
-import { useProfessions } from "../../../hooks/useProfession";
-import { useQialities } from "../../../hooks/useQialities";
+// import { useProfessions } from "../../../hooks/useProfession";
+import { useSelector } from "react-redux";
+import { getQualities, getQualitiesById, getQualitiesLoadingStatus } from "../../../store/qualities";
+import { getProfessions } from "../../../store/professions";
 const userEditPage = () => {
-    const { userId } = useParams();
     const history = useHistory();
     const { currentUser, editUser } = useAuth();
-    const { profession } = useProfessions();
-    const { qualities } = useQialities();
+    // const { profession } = useProfessions();
+    const professions = useSelector(getProfessions())
+    const qualities = useSelector(getQualities())
+    const qualitiesLoading = useSelector(getQualitiesLoadingStatus())
     const [user, setUser] = useState({
         name: currentUser.name,
         email: currentUser.email,
@@ -22,9 +24,12 @@ const userEditPage = () => {
         profession: currentUser.profession,
         qualities: currentUser.qualities
     });
+    const qualitiesList = qualities.map((q) => ({
+        label: q.name,
+        value: q._id
+    }));
     const [errors, setErrors] = useState({});
-    const professions = profession.map(p => ({label: p.name, value: p._id}));
-    const allQualities = qualities.length > 0 ? (qualities.map(q => ({label: q.name, value: q._id}))) : [];
+    const professionsList = professions.map(p => ({label: p.name, value: p._id}));
     const validatorConfig = {
         email: {
             isRequired: {
@@ -46,6 +51,7 @@ const userEditPage = () => {
     useEffect(() => {
         validate();
     }, [currentUser]);
+    
 
     const isValid = Object.keys(errors).length === 0;
     const getQualitiesId = (array) => {
@@ -69,7 +75,7 @@ const userEditPage = () => {
         <form onSubmit={handleSubmit}>
             <div className="container m-4 ">
                 <div className="row">
-                    <p className="col-1">
+                    <p className="col col-1">
                         <button
                             onClick={() => history.push(`/users/${currentUser._id}`)}
                             className="btn btn-outline-primary mb-1"
@@ -82,8 +88,7 @@ const userEditPage = () => {
                         </button>
                     </p>
                     <div className="col-md-6 offset-md-3 p-4 shadow-lg">
-                        {qualities.length
-                            ? (<>
+                            <>
                                 <p>Редактирование пользователя</p>
                                 <TextField
                                     label="Имя"
@@ -103,7 +108,7 @@ const userEditPage = () => {
                                     label="Выберите профессию"
                                     name="profession"
                                     dafaultOption="Выбрать..."
-                                    options={professions}
+                                    options={professionsList}
                                     onChange={handleChange}
                                     value={user.profession}
                                 />
@@ -120,7 +125,7 @@ const userEditPage = () => {
                                 <MultiSelectField
                                     label="Выберите качества"
                                     name="qualities"
-                                    options={allQualities}
+                                    options={qualitiesList}
                                     onChange={handleChange}
                                     defaulValue={user.qualities}
                                 />
@@ -131,9 +136,6 @@ const userEditPage = () => {
                                     Сохранить
                                 </button>
                             </>
-                        ) : (
-                            <Loading radius={3} />
-                        )}
                     </div>
                 </div>
             </div>
